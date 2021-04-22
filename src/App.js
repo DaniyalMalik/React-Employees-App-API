@@ -10,7 +10,7 @@ export default class App extends Component {
         <Router>
           <Switch>
             <Route exact path='/' component={Routes} />;
-            <Route exact path='/dashboard/:email' component={Info} />;
+            <Route exact path='/dashboard/:params_email' component={Info} />;
           </Switch>
         </Router>
       </div>
