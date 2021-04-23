@@ -4,7 +4,8 @@ import PhoneInput from 'react-phone-number-input';
 import swal from 'sweetalert';
 import Navbar from '../layouts/Navbar';
 import axios from 'axios';
-import Spinner from '../assets/spinner.gif';
+import Spinner from '../layouts/Spinner';
+import { Link } from 'react-router-dom';
 
 export default class Info extends Component {
   state = {
@@ -27,27 +28,11 @@ export default class Info extends Component {
     const id = value.id;
     const res = await axios.delete(`http://localhost:5000/api/users/${id}`);
 
-    // this.setState({ users: res.data });
+    this.setState({ users: res.data });
   };
 
   onlogout = () => {
     window.location = '/';
-  };
-
-  onDetailsClick = (value) => {
-    let name = value.name;
-    let email = value.email;
-    let phone = value.phone;
-    let DoJ = value.DoJ;
-    let salary = value.salary;
-
-    this.setState({
-      name,
-      email,
-      phone,
-      DoJ,
-      salary,
-    });
   };
 
   onUpdateClick = (value) => {
@@ -188,20 +173,19 @@ export default class Info extends Component {
                               className='btn btn-secondary'
                               value='Edit'
                             />
-                            <input
-                              onClick={() => this.onDetailsClick(value)}
-                              type='submit'
-                              data-toggle='modal'
-                              data-target='#details'
-                              className='btn btn-primary'
-                              value='Details'
-                            />
+                            <Link
+                              to={{
+                                pathname: `/dashboard/details/${params_email}/${value.id}`,
+                              }}
+                              className='btn btn-primary'>
+                              Details
+                            </Link>
                           </div>
                         </td>
                       </tr>
                     ))
                   ) : (
-                    <img src={Spinner} alt='No Data!' />
+                    <Spinner />
                   )}
                 </tbody>
               </table>
@@ -311,94 +295,6 @@ export default class Info extends Component {
                       type='submit'
                       className='btn btn-success btn-block'
                     />
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Show details of an employee */}
-          <div className='modal' id='details'>
-            <div className='modal-dialog'>
-              <div className='modal-content'>
-                <div className='modal-header'>
-                  <h4 className='modal-title'>Employee Details</h4>
-                  <button type='button' className='close' data-dismiss='modal'>
-                    &times;
-                  </button>
-                </div>
-                <div className='modal-body'>
-                  <form onSubmit={this.onAdd}>
-                    <div className='input-group mb-3'>
-                      <div className='input-group-prepend'>
-                        <span className='input-group-text'>Name</span>
-                      </div>
-                      <input
-                        type='text'
-                        id='name'
-                        placeholder='Enter Name'
-                        value={name}
-                        name='name'
-                        className='form-control'
-                        disabled
-                      />
-                    </div>
-                    <div className='input-group mb-3'>
-                      <div className='input-group-prepend'>
-                        <span className='input-group-text'>Email</span>
-                      </div>
-                      <input
-                        type='email'
-                        id='email'
-                        placeholder='Enter Email'
-                        value={email}
-                        name='email'
-                        className='form-control'
-                        disabled
-                      />
-                    </div>
-                    <div className='input-group mb-3'>
-                      <div className='input-group-prepend'>
-                        <span className='input-group-text'>Phone Number</span>
-                      </div>
-                      <PhoneInput
-                        id='phone'
-                        placeholder='Enter Phone Number'
-                        value={phone}
-                        name='phone'
-                        className='form-control'
-                        disabled
-                      />
-                    </div>
-                    <div className='input-group mb-3'>
-                      <div className='input-group-prepend'>
-                        <span className='input-group-text'>Salary</span>
-                      </div>
-                      <input
-                        value={salary}
-                        type='number'
-                        id='salary'
-                        placeholder='Enter Salary'
-                        name='salary'
-                        className='form-control'
-                        disabled
-                      />
-                    </div>
-                    <div className='input-group mb-3'>
-                      <div className='input-group-prepend'>
-                        <span className='input-group-text'>
-                          Date of Joining
-                        </span>
-                      </div>
-                      <input
-                        type='date'
-                        id='date'
-                        value={DoJ}
-                        name='date'
-                        className='form-control'
-                        disabled
-                      />
-                    </div>
                   </form>
                 </div>
               </div>
