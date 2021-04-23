@@ -18,17 +18,21 @@ export default class Login extends Component {
     let valid = false,
       users = localStorage.getItem('users');
     users = JSON.parse(users);
-    for (let i = 0; i < users.length; i++) {
-      if (email === users[i].email && password === users[i].password) {
-        valid = true;
-        swal('Greetings!', 'Logged In!', 'success');
-        window.location = `/dashboard/${email}`;
-        break;
+    if (users !== null) {
+      for (let i = 0; i < users.length; i++) {
+        if (email === users[i].email && password === users[i].password) {
+          valid = true;
+          swal('Greetings!', 'Logged In!', 'success');
+          window.location = `/dashboard/${email}`;
+          break;
+        }
       }
-    }
-    if (valid === false) {
-      swal('Greetings!', 'Incorrect Credentials!', 'error');
-      valid = true;
+      if (valid === false) {
+        swal('Greetings!', 'Incorrect Credentials!', 'error');
+        valid = true;
+      }
+    } else {
+      swal('Greetings!', 'No user exists!', 'error');
     }
   };
 
@@ -75,7 +79,7 @@ export default class Login extends Component {
               </div>
               <input
                 type='submit'
-                className='btn btn-secondary btn-block'
+                className='btn btn-success btn-block'
                 name='submit'
                 value='Login'
               />

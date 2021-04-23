@@ -21,13 +21,17 @@ export default class Register extends Component {
     let canReg = false,
       users = localStorage.getItem('users');
     users = JSON.parse(users);
-    for (let i = 0; i < users.length; i++) {
-      if (users[i].email === email) {
-        canReg = false;
-        break;
-      } else {
-        canReg = true;
+    if (users !== null) {
+      for (let i = 0; i < users.length; i++) {
+        if (users[i].email === email) {
+          canReg = false;
+          break;
+        } else {
+          canReg = true;
+        }
       }
+    } else {
+      canReg = true;
     }
     if (users !== null && canReg === true) {
       if (password === repeat_password) {
@@ -111,7 +115,7 @@ export default class Register extends Component {
               </div>
               <input
                 type='submit'
-                className='btn btn-secondary btn-block'
+                className='btn btn-primary btn-block'
                 name='submit'
                 value='Register'
               />
