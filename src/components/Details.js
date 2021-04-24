@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import swal from 'sweetalert';
 import Navbar from '../layouts/Navbar';
 import Spinner from '../layouts/Spinner';
 
@@ -15,8 +16,6 @@ export default class Details extends Component {
 
   componentDidMount = async () => {
     const { id } = this.props.match.params;
-    console.log(typeof id);
-    console.log(id);
     const res = await axios.get(`http://localhost:5000/api/users/${id}`);
     const data = res.data[0];
 
@@ -28,6 +27,10 @@ export default class Details extends Component {
       salary: data.salary,
       DoJ: data.DoJ,
     });
+
+    return res.status !== 200
+      ? swal('Greetings!', res.data.error, 'error')
+      : null;
   };
 
   render() {
