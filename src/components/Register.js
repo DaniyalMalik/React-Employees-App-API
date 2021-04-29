@@ -115,7 +115,7 @@ export default class Register extends Component {
               </div>
               <input
                 type='submit'
-                className='btn btn-primary btn-block'
+                className='btn btn-success btn-block'
                 name='submit'
                 value='Register'
               />

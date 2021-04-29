@@ -27,9 +27,12 @@ export default class Add extends Component {
       salary,
     };
 
-    const res = await axios.post('http://localhost:5000/api/users', data);
+    const res = await axios.post(
+      'http://localhost:5000/api/v1/employees',
+      data,
+    );
 
-    if (res.status === 200) {
+    if (res.status === 201) {
       swal('Greetings!', 'Data Added!', 'success');
       this.props.history.push(`/dashboard/${params_email}`);
     } else {

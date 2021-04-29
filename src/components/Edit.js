@@ -17,15 +17,18 @@ export default class Add extends Component {
   componentDidMount = async () => {
     const { id } = this.props.match.params;
 
-    const res = await axios.get(`http://localhost:5000/api/users/${id}`);
+    const res = await axios.get(`http://localhost:5000/api/v1/employees/${id}`);
+    const users = res.data.data;
+    let date = users.DoJ;
+    date = date.split('T')[0];
 
     this.setState({
-      id: res.data[0].id,
-      name: res.data[0].name,
-      email: res.data[0].email,
-      DoJ: res.data[0].DoJ,
-      salary: res.data[0].salary,
-      phone: res.data[0].phone,
+      id: users._id,
+      name: users.name,
+      email: users.email,
+      DoJ: date,
+      salary: users.salary,
+      phone: users.phone,
     });
   };
 
@@ -36,14 +39,14 @@ export default class Add extends Component {
     const updUser = { name, email, phone, DoJ, salary };
 
     const res = await axios.put(
-      `http://localhost:5000/api/users/${id}`,
-      updUser
+      `http://localhost:5000/api/v1/employees/${id}`,
+      updUser,
     );
 
     return (
-      res.status !== 200
-        ? swal('Greetings!', res.data.error, 'error')
-        : swal('Greetings!', 'Updated!', 'success'),
+      res.status === 200
+        ? swal('Greetings!', res.data.message, 'success')
+        : swal('Greetings!', res.data.error, 'error'),
       this.props.history.push(`/dashboard/${params_email}`)
     );
   };

@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import 'react-phone-number-input/style.css';
-import PhoneInput from 'react-phone-number-input';
 import swal from 'sweetalert';
 import Navbar from '../layouts/Navbar';
 import axios from 'axios';
@@ -10,49 +8,31 @@ import { Link } from 'react-router-dom';
 export default class Employees extends Component {
   state = {
     users: [],
-    id: '',
-    name: '',
-    email: '',
-    phone: '',
-    DoJ: '',
-    salary: '',
   };
 
   componentDidMount = async () => {
-    const res = await axios.get('http://localhost:5000/api/users');
+    const res = await axios.get('http://localhost:5000/api/v1/employees');
+    const users = res.data.data;
 
-    this.setState({ users: res.data });
+    this.setState({ users });
   };
 
-  onDelete = async (value, e) => {
+  onDelete = async (id, e) => {
     e.preventDefault();
-    const id = value.id;
-    const res = await axios.delete(`http://localhost:5000/api/users/${id}`);
 
-    this.setState({ users: res.data });
+    const res = await axios.delete(
+      `http://localhost:5000/api/v1/employees/${id}`,
+    );
 
-    return res.status !== 200
-      ? swal('Greetings!', res.data.error, 'error')
-      : swal('Greetings!', 'Deleted!', 'success');
+    this.setState({ users: res.data.employees });
+
+    return res.status === 200
+      ? swal('Greetings!', res.data.message, 'success')
+      : swal('Greetings!', res.data.error, 'error');
   };
 
   onlogout = () => {
     this.props.history.push(`/`);
-  };
-
-  onUpdate = async (id, e) => {
-    e.preventDefault();
-    const { name, email, phone, DoJ, salary } = this.state;
-    const updUser = { name, email, phone, DoJ, salary };
-
-    const res = await axios.put(
-      `http://localhost:5000/api/users/${id}`,
-      updUser
-    );
-
-    return res.status !== 200
-      ? swal('Greetings!', res.data.error, 'error')
-      : swal('Greetings!', 'Updated!', 'success');
   };
 
   onchange = () => {
@@ -72,7 +52,7 @@ export default class Employees extends Component {
   };
 
   render() {
-    const { id, name, email, phone, DoJ, salary, users } = this.state;
+    const { users } = this.state;
     const { params_email } = this.props.match.params;
     let count = 0;
 
@@ -102,23 +82,23 @@ export default class Employees extends Component {
                         <td>{value.name}</td>
                         <td>{value.email}</td>
                         <td>{value.phone}</td>
-                        <td>{value.DoJ}</td>
+                        <td>{new Date(value.DoJ).toString()}</td>
                         <td>{value.salary}</td>
                         <td>
-                          <div className='btn-group'>
+                          <div>
                             <input
                               type='submit'
                               className='btn btn-danger'
-                              onClick={(e) => this.onDelete(value, e)}
+                              onClick={(e) => this.onDelete(value._id, e)}
                               value='Delete'
                             />
                             <Link
-                              to={`/dashboard/edit/${params_email}/${value.id}`}
+                              to={`/dashboard/edit/${params_email}/${value._id}`}
                               className='btn btn-secondary'>
                               Edit
                             </Link>
                             <Link
-                              to={`/dashboard/details/${params_email}/${value.id}`}
+                              to={`/dashboard/details/${params_email}/${value._id}`}
                               className='btn btn-primary'>
                               Details
                             </Link>

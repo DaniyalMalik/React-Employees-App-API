@@ -16,11 +16,11 @@ export default class Details extends Component {
 
   componentDidMount = async () => {
     const { id } = this.props.match.params;
-    const res = await axios.get(`http://localhost:5000/api/users/${id}`);
-    const data = res.data[0];
+    const res = await axios.get(`http://localhost:5000/api/v1/employees/${id}`);
+    const data = res.data.data;
 
     this.setState({
-      id: data.id,
+      id: data._id,
       name: data.name,
       email: data.email,
       phone: data.phone,
