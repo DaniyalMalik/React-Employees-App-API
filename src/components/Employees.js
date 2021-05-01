@@ -12,7 +12,10 @@ export default class Employees extends Component {
 
   componentDidMount = async () => {
     const res = await axios.get(
-      'https://employees-app-backend.herokuapp.com/api/v1/employees',
+      `${
+        process.env.REACT_APP_BASE_URL_LOCAL ||
+        process.env.REACT_APP_BASE_URL_PROD
+      }/api/v1/employees`,
     );
     const users = res.data.data;
     let type = '';
@@ -32,7 +35,10 @@ export default class Employees extends Component {
     let type = '';
 
     const res = await axios.delete(
-      `https://employees-app-backend.herokuapp.com/api/v1/employees/${id}`,
+      `${
+        process.env.REACT_APP_BASE_URL_LOCAL ||
+        process.env.REACT_APP_BASE_URL_PROD
+      }/api/v1/employees/${id}`,
     );
 
     res.data.success ? (type = 'success') : (type = 'error');

@@ -29,7 +29,10 @@ export default class Add extends Component {
     };
 
     const res = await axios.post(
-      'https://employees-app-backend.herokuapp.com/api/v1/employees',
+      `${
+        process.env.REACT_APP_BASE_URL_LOCAL ||
+        process.env.REACT_APP_BASE_URL_PROD
+      }/api/v1/employees`,
       data,
     );
 

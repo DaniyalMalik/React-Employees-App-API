@@ -17,14 +17,21 @@ export default class Add extends Component {
   componentDidMount = async () => {
     const { id } = this.props.match.params;
     const res = await axios.get(
-      `https://employees-app-backend.herokuapp.com/api/v1/employees/${id}`,
+      `${
+        process.env.REACT_APP_BASE_URL_LOCAL ||
+        process.env.REACT_APP_BASE_URL_PROD
+      }/api/v1/employees/${id}`,
     );
     let type = '';
 
     res.data.success ? (type = 'success') : (type = 'error');
 
     if (type === 'error') {
-      return (type = 'error'), swal('Greetings!', res.data.message, type);
+      return (
+        window.history.back(),
+        (type = 'error'),
+        swal('Greetings!', res.data.message, type)
+      );
     }
 
     const users = res.data.data;
@@ -50,7 +57,10 @@ export default class Add extends Component {
     let type = '';
 
     const res = await axios.put(
-      `https://employees-app-backend.herokuapp.com/api/v1/employees/${id}`,
+      `${
+        process.env.REACT_APP_BASE_URL_LOCAL ||
+        process.env.REACT_APP_BASE_URL_PROD
+      }/api/v1/employees/${id}`,
       updUser,
     );
 

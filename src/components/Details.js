@@ -16,7 +16,12 @@ export default class Details extends Component {
 
   componentDidMount = async () => {
     const { id } = this.props.match.params;
-    const res = await axios.get(`https://employees-app-backend.herokuapp.com/api/v1/employees/${id}`);
+    const res = await axios.get(
+      `${
+        process.env.REACT_APP_BASE_URL_LOCAL ||
+        process.env.REACT_APP_BASE_URL_PROD
+      }/api/v1/employees/${id}`,
+    );
     const data = res.data.data;
     let type = '';
 
