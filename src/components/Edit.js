@@ -16,8 +16,15 @@ export default class Add extends Component {
 
   componentDidMount = async () => {
     const { id } = this.props.match.params;
-
     const res = await axios.get(`http://localhost:5000/api/v1/employees/${id}`);
+    let type = '';
+
+    res.data.success ? (type = 'success') : (type = 'error');
+
+    if (type === 'error') {
+      return (type = 'error'), swal('Greetings!', res.data.message, type);
+    }
+
     const users = res.data.data;
     let date = users.DoJ;
     date = date.split('T')[0];
@@ -34,21 +41,24 @@ export default class Add extends Component {
 
   onUpdate = async (e) => {
     e.preventDefault();
+
     const { params_email } = this.props.match.params;
     const { id, name, email, phone, DoJ, salary } = this.state;
     const updUser = { name, email, phone, DoJ, salary };
+    let type = '';
 
     const res = await axios.put(
       `http://localhost:5000/api/v1/employees/${id}`,
       updUser,
     );
 
-    return (
-      res.status === 200
-        ? swal('Greetings!', res.data.message, 'success')
-        : swal('Greetings!', res.data.error, 'error'),
-      this.props.history.push(`/dashboard/${params_email}`)
-    );
+    res.data.success ? (type = 'success') : (type = 'error');
+
+    swal('Greetings!', res.data.message, type);
+
+    if (type === 'success') {
+      this.props.history.push(`/dashboard/${params_email}`);
+    }
   };
 
   onchange = () => {

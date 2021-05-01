@@ -18,6 +18,7 @@ export default class Add extends Component {
     e.preventDefault();
     const { name, email, phone, DoJ, salary } = this.state;
     const { params_email } = this.props.match.params;
+    let type = '';
 
     let data = {
       name,
@@ -32,11 +33,12 @@ export default class Add extends Component {
       data,
     );
 
-    if (res.status === 201) {
-      swal('Greetings!', 'Data Added!', 'success');
+    res.data.success ? (type = 'success') : (type = 'error');
+
+    swal('Greetings!', res.data.message, type);
+
+    if (type === 'success') {
       this.props.history.push(`/dashboard/${params_email}`);
-    } else {
-      swal('Greetings!', res.data.error, 'error');
     }
   };
 

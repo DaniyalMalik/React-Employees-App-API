@@ -13,22 +13,36 @@ export default class Employees extends Component {
   componentDidMount = async () => {
     const res = await axios.get('http://localhost:5000/api/v1/employees');
     const users = res.data.data;
+    let type = '';
 
+    res.data.success ? (type = 'success') : (type = 'error');
+
+    if (!res.data.success) {
+      return swal('Greetings!', res.data.message, type);
+    }
+
+    // swal('Greetings!', res?.data?.message, type);
     this.setState({ users });
   };
 
   onDelete = async (id, e) => {
     e.preventDefault();
+    let type = '';
 
     const res = await axios.delete(
       `http://localhost:5000/api/v1/employees/${id}`,
     );
 
-    this.setState({ users: res.data.employees });
+    res.data.success ? (type = 'success') : (type = 'error');
 
-    return res.status === 200
-      ? swal('Greetings!', res.data.message, 'success')
-      : swal('Greetings!', res.data.error, 'error');
+    if (type === 'success') {
+      return (
+        this.setState({ users: res.data.employees }),
+        swal('Greetings!', res.data.message, type)
+      );
+    }
+
+    swal('Greetings!', res.data.message, type);
   };
 
   onlogout = () => {

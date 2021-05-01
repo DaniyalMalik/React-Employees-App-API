@@ -18,6 +18,13 @@ export default class Details extends Component {
     const { id } = this.props.match.params;
     const res = await axios.get(`http://localhost:5000/api/v1/employees/${id}`);
     const data = res.data.data;
+    let type = '';
+
+    res.data.success ? (type = 'success') : (type = 'error');
+
+    if (!res.data.success) {
+      return swal('Greetings!', res.data.message, type);
+    }
 
     this.setState({
       id: data._id,
@@ -27,10 +34,6 @@ export default class Details extends Component {
       salary: data.salary,
       DoJ: data.DoJ,
     });
-
-    return res.status !== 200
-      ? swal('Greetings!', res.data.error, 'error')
-      : null;
   };
 
   render() {
