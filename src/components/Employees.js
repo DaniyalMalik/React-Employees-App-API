@@ -107,7 +107,7 @@ export default class Employees extends Component {
                         <td>{new Date(value.DoJ).toString()}</td>
                         <td>{value.salary}</td>
                         <td>
-                          <div>
+                          <div className='btn-group'>
                             <input
                               type='submit'
                               className='btn btn-danger'

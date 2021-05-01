@@ -33,7 +33,6 @@ export default class Add extends Component {
         swal('Greetings!', res.data.message, type)
       );
     }
-
     const users = res.data.data;
     let date = users.DoJ;
     date = date.split('T')[0];
