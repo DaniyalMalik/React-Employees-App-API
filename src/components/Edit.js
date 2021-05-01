@@ -16,7 +16,9 @@ export default class Add extends Component {
 
   componentDidMount = async () => {
     const { id } = this.props.match.params;
-    const res = await axios.get(`https://employees-app-backend.herokuapp.com/api/v1/employees/${id}`);
+    const res = await axios.get(
+      `https://employees-app-backend.herokuapp.com/api/v1/employees/${id}`,
+    );
     let type = '';
 
     res.data.success ? (type = 'success') : (type = 'error');
@@ -48,7 +50,7 @@ export default class Add extends Component {
     let type = '';
 
     const res = await axios.put(
-      `http://localhost:5000/api/v1/employees/${id}`,
+      `https://employees-app-backend.herokuapp.com/api/v1/employees/${id}`,
       updUser,
     );
 
