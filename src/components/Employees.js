@@ -11,7 +11,9 @@ export default class Employees extends Component {
   };
 
   componentDidMount = async () => {
-    const res = await axios.get('http://localhost:5000/api/v1/employees');
+    const res = await axios.get(
+      'https://employees-app-backend.herokuapp.com/api/v1/employees',
+    );
     const users = res.data.data;
     let type = '';
 
@@ -30,7 +32,7 @@ export default class Employees extends Component {
     let type = '';
 
     const res = await axios.delete(
-      `http://localhost:5000/api/v1/employees/${id}`,
+      `https://employees-app-backend.herokuapp.com/api/v1/employees/${id}`,
     );
 
     res.data.success ? (type = 'success') : (type = 'error');
