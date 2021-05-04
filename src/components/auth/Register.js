@@ -1,64 +1,50 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert';
+import axios from 'axios';
 
 export default class Register extends Component {
   state = {
+    name: '',
     email: '',
     password: '',
     repeat_password: '',
   };
 
   onchange = () => {
-    let email = document.getElementById('emailR').value;
-    let password = document.getElementById('passwordR').value;
+    let name = document.getElementById('name').value;
+    let email = document.getElementById('email').value;
+    let password = document.getElementById('password').value;
     let repeat_password = document.getElementById('repeat-password').value;
-    this.setState({ email, password, repeat_password });
+
+    this.setState({ name, email, password, repeat_password });
   };
 
-  onregister = (e) => {
+  onregister = async (e) => {
     e.preventDefault();
-    const { email, password, repeat_password } = this.state;
-    let canReg = false,
-      users = localStorage.getItem('users');
-    users = JSON.parse(users);
-    if (users !== null) {
-      for (let i = 0; i < users.length; i++) {
-        if (users[i].email === email) {
-          canReg = false;
-          break;
-        } else {
-          canReg = true;
-        }
-      }
-    } else {
-      canReg = true;
+    const { name, email, password } = this.state;
+    const user = { name, email, password };
+
+    const res = await axios.post(
+      `${
+        process.env.REACT_APP_BASE_URL_LOCAL ||
+        process.env.REACT_APP_BASE_URL_PROD
+      }/api/auth/register`,
+      user,
+    );
+
+    if (!res.data.success) {
+      return swal('Greetings', res.data.message, 'error');
     }
-    if (users !== null && canReg === true) {
-      if (password === repeat_password) {
-        swal('Greetings!', 'Registered!', 'success');
-        let user = [{ email, password }];
-        users = users.concat(user);
-        localStorage.setItem('users', JSON.stringify(users));
-        window.location = `/dashboard/${email}`;
-      } else {
-        swal('Greetings!', 'Passwords Not Match!', 'error');
-      }
-    } else if (users === null && canReg === true) {
-      if (password === repeat_password) {
-        swal('Greetings!', 'Registered!', 'success');
-        let user = [{ email, password }];
-        localStorage.setItem('users', JSON.stringify(user));
-        window.location = `/dashboard/${email}`;
-      } else {
-        swal('Greetings!', 'Passwords Not Match!', 'error');
-      }
-    } else {
-      swal('Greetings!', 'User Already Exists!', 'error');
-    }
+
+    const token = res.data.token;
+
+    localStorage.setItem('token', token);
+    swal('Greetings', res.data.message, 'success');
+    this.props.history.push(`/dashboard/${email}`);
   };
 
   render() {
-    const { email, password, repeat_password } = this.state;
+    const { name, email, password, repeat_password } = this.state;
 
     return (
       <div className='container mt-5'>
@@ -70,12 +56,27 @@ export default class Register extends Component {
             <form action='' method='post' onSubmit={this.onregister}>
               <div className='input-group mb-3'>
                 <div className='input-group-prepend'>
+                  <span className='input-group-text'>Name</span>
+                </div>
+                <input
+                  onChange={this.onchange}
+                  type='text'
+                  id='name'
+                  placeholder='Enter Name'
+                  name='name'
+                  value={name}
+                  className='form-control'
+                  required
+                />
+              </div>
+              <div className='input-group mb-3'>
+                <div className='input-group-prepend'>
                   <span className='input-group-text'>Email</span>
                 </div>
                 <input
                   onChange={this.onchange}
                   type='email'
-                  id='emailR'
+                  id='email'
                   placeholder='Enter Email'
                   name='email'
                   value={email}
@@ -90,7 +91,7 @@ export default class Register extends Component {
                 <input
                   onChange={this.onchange}
                   type='password'
-                  id='passwordR'
+                  id='password'
                   value={password}
                   name='password'
                   placeholder='Enter Password'

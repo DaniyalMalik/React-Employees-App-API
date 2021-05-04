@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Navbar from '../layouts/Navbar';
+import Navbar from '../../layouts/Navbar';
 import axios from 'axios';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
@@ -18,7 +18,6 @@ export default class Add extends Component {
     e.preventDefault();
     const { name, email, phone, DoJ, salary } = this.state;
     const { params_email } = this.props.match.params;
-    let type = '';
 
     let data = {
       name,
@@ -28,21 +27,25 @@ export default class Add extends Component {
       salary,
     };
 
-    const res = await axios.post(
-      `${
-        process.env.REACT_APP_BASE_URL_LOCAL ||
-        process.env.REACT_APP_BASE_URL_PROD
-      }/api/v1/employees`,
-      data,
-    );
+    const token = localStorage.getItem('token');
+    const baseUrl =
+      process.env.REACT_APP_BASE_URL_LOCAL ||
+      process.env.REACT_APP_BASE_URL_PROD;
+    const res = await axios.post(baseUrl + '/api/v1/employees', data, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
+    let type = '';
     res.data.success ? (type = 'success') : (type = 'error');
 
-    swal('Greetings!', res.data.message, type);
-
-    if (type === 'success') {
-      this.props.history.push(`/dashboard/${params_email}`);
+    if (!res.data.success) {
+      return (
+        swal('Greetings!', res.data.message, type), this.props.history.push('/')
+      );
     }
+
+    this.props.history.push(`/dashboard/${params_email}`);
+    swal('Greetings!', res.data.message, type);
   };
 
   onchange = () => {
@@ -67,7 +70,7 @@ export default class Add extends Component {
 
     return (
       <div>
-        <Navbar email={params_email} />
+        <Navbar email={params_email} history={this.props.history} />
         <div className='container mt-4'>
           <div className='row'>
             <div className='col-md-8'>
@@ -149,7 +152,6 @@ export default class Add extends Component {
                         onChange={this.onchange}
                         name='date'
                         className='form-control'
-                        required
                       />
                     </div>
                     <div className='card-footer'>

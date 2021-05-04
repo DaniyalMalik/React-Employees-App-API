@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import Routes from './components/Routes';
-import Employees from './components/Employees';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Details from './components/Details';
-import Add from './components/Add';
-import Edit from './components/Edit';
-import NotFound from './components/NotFound';
+import Routes from './layouts/Routes';
+import Employees from './components/crud/Employees';
+import Details from './components/crud/Details';
+import Add from './components/crud/Add';
+import Edit from './components/crud/Edit';
+import NotFound from './components/pages/NotFound';
 
 export default class App extends Component {
   render() {

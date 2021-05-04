@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 export default class Navbar extends Component {
+  onlogout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem('token');
+
+    this.props.history.push(`/`);
+  };
+
   render() {
     const { email } = this.props;
     return (
@@ -19,9 +26,12 @@ export default class Navbar extends Component {
               </Link>
             </li>
             <li className='nav-item'>
-              <Link className='nav-link' to='/'>
+              <a
+                href={{ javascript: void 0 }}
+                className='nav-link'
+                onClick={this.onlogout}>
                 Logout
-              </Link>
+              </a>
             </li>
           </ul>
         </nav>

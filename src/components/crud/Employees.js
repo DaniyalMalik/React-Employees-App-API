@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert';
-import Navbar from '../layouts/Navbar';
+import Navbar from '../../layouts/Navbar';
 import axios from 'axios';
-import Spinner from '../layouts/Spinner';
+import Spinner from '../../layouts/Spinner';
 import { Link } from 'react-router-dom';
 
 export default class Employees extends Component {
@@ -11,19 +11,24 @@ export default class Employees extends Component {
   };
 
   componentDidMount = async () => {
-    const res = await axios.get(
-      `${
-        process.env.REACT_APP_BASE_URL_LOCAL ||
-        process.env.REACT_APP_BASE_URL_PROD
-      }/api/v1/employees`,
-    );
-    const users = res.data.data;
-    let type = '';
+    const token = localStorage.getItem('token');
+    const baseUrl =
+      process.env.REACT_APP_BASE_URL_LOCAL ||
+      process.env.REACT_APP_BASE_URL_PROD;
 
+    const res = await axios.get(baseUrl + '/api/v1/employees', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const users = res.data.data;
+
+    let type = '';
     res.data.success ? (type = 'success') : (type = 'error');
 
     if (!res.data.success) {
-      return swal('Greetings!', res.data.message, type);
+      return (
+        swal('Greetings!', res.data.message, type), this.props.history.push('/')
+      );
     }
 
     // swal('Greetings!', res?.data?.message, type);
@@ -32,29 +37,26 @@ export default class Employees extends Component {
 
   onDelete = async (id, e) => {
     e.preventDefault();
+    const token = localStorage.getItem('token');
+    const baseUrl =
+      process.env.REACT_APP_BASE_URL_LOCAL ||
+      process.env.REACT_APP_BASE_URL_PROD;
+
+    const res = await axios.delete(baseUrl + `/api/v1/employees/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
     let type = '';
-
-    const res = await axios.delete(
-      `${
-        process.env.REACT_APP_BASE_URL_LOCAL ||
-        process.env.REACT_APP_BASE_URL_PROD
-      }/api/v1/employees/${id}`,
-    );
-
     res.data.success ? (type = 'success') : (type = 'error');
 
-    if (type === 'success') {
+    if (!res.data.success) {
       return (
-        this.setState({ users: res.data.employees }),
-        swal('Greetings!', res.data.message, type)
+        swal('Greetings!', res.data.message, type), this.props.history.push('/')
       );
     }
 
+    this.setState({ users: res.data.employees });
     swal('Greetings!', res.data.message, type);
-  };
-
-  onlogout = () => {
-    this.props.history.push(`/`);
   };
 
   onchange = () => {
@@ -80,7 +82,7 @@ export default class Employees extends Component {
 
     return (
       <div>
-        <Navbar email={params_email} />
+        <Navbar email={params_email} history={this.props.history} />
         <div className='container mt-5'>
           <div className='row'>
             <div className='col-md-9'>

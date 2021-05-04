@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Login from './Login';
-import Register from './Register';
+import Login from '../components/auth/Login';
+import Register from '../components/auth/Register';
 
 export default class Routes extends Component {
   render() {
@@ -22,10 +22,10 @@ export default class Routes extends Component {
         </div>
         <div class='tab-content'>
           <div id='login' class='container tab-pane active'>
-            <Login />
+            <Login history={this.props.history} />
           </div>
           <div id='register' class='container tab-pane fade'>
-            <Register />
+            <Register history={this.props.history} />
           </div>
         </div>
       </div>

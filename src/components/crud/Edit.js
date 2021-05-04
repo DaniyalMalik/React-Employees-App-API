@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Navbar from '../layouts/Navbar';
+import Navbar from '../../layouts/Navbar';
 import axios from 'axios';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
@@ -16,23 +16,23 @@ export default class Add extends Component {
 
   componentDidMount = async () => {
     const { id } = this.props.match.params;
-    const res = await axios.get(
-      `${
-        process.env.REACT_APP_BASE_URL_LOCAL ||
-        process.env.REACT_APP_BASE_URL_PROD
-      }/api/v1/employees/${id}`,
-    );
-    let type = '';
+    const token = localStorage.getItem('token');
+    const baseUrl =
+      process.env.REACT_APP_BASE_URL_LOCAL ||
+      process.env.REACT_APP_BASE_URL_PROD;
+    const res = await axios.get(baseUrl + `/api/v1/employees/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
+    let type = '';
     res.data.success ? (type = 'success') : (type = 'error');
 
-    if (type === 'error') {
+    if (!res.data.success) {
       return (
-        window.history.back(),
-        (type = 'error'),
-        swal('Greetings!', res.data.message, type)
+        swal('Greetings!', res.data.message, type), this.props.history.push('/')
       );
     }
+
     const users = res.data.data;
     let date = users.DoJ;
     date = date.split('T')[0];
@@ -53,23 +53,26 @@ export default class Add extends Component {
     const { params_email } = this.props.match.params;
     const { id, name, email, phone, DoJ, salary } = this.state;
     const updUser = { name, email, phone, DoJ, salary };
+
+    const token = localStorage.getItem('token');
+    const baseUrl =
+      process.env.REACT_APP_BASE_URL_LOCAL ||
+      process.env.REACT_APP_BASE_URL_PROD;
+    const res = await axios.put(baseUrl + `/api/v1/employees/${id}`, updUser, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
     let type = '';
-
-    const res = await axios.put(
-      `${
-        process.env.REACT_APP_BASE_URL_LOCAL ||
-        process.env.REACT_APP_BASE_URL_PROD
-      }/api/v1/employees/${id}`,
-      updUser,
-    );
-
     res.data.success ? (type = 'success') : (type = 'error');
+    
+    if (!res.data.success) {
+      return (
+        swal('Greetings!', res.data.message, type), this.props.history.push('/')
+      );
+    }
 
     swal('Greetings!', res.data.message, type);
-
-    if (type === 'success') {
-      this.props.history.push(`/dashboard/${params_email}`);
-    }
+    this.props.history.push(`/dashboard/${params_email}`);
   };
 
   onchange = () => {
@@ -94,7 +97,7 @@ export default class Add extends Component {
 
     return (
       <div>
-        <Navbar email={params_email} />
+        <Navbar email={params_email} history={this.props.history} />
         <div className='container mt-4'>
           <div className='row'>
             <div className='col-md-8'>

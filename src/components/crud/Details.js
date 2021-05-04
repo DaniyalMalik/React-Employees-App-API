@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
-import Navbar from '../layouts/Navbar';
-import Spinner from '../layouts/Spinner';
+import Navbar from '../../layouts/Navbar';
+import Spinner from '../../layouts/Spinner';
 
 export default class Details extends Component {
   state = {
@@ -16,19 +16,22 @@ export default class Details extends Component {
 
   componentDidMount = async () => {
     const { id } = this.props.match.params;
-    const res = await axios.get(
-      `${
-        process.env.REACT_APP_BASE_URL_LOCAL ||
-        process.env.REACT_APP_BASE_URL_PROD
-      }/api/v1/employees/${id}`,
-    );
+    const token = localStorage.getItem('token');
+    const baseUrl =
+      process.env.REACT_APP_BASE_URL_LOCAL ||
+      process.env.REACT_APP_BASE_URL_PROD;
+    const res = await axios.get(baseUrl + `/api/v1/employees/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     const data = res.data.data;
-    let type = '';
 
+    let type = '';
     res.data.success ? (type = 'success') : (type = 'error');
 
     if (!res.data.success) {
-      return swal('Greetings!', res.data.message, type);
+      return (
+        swal('Greetings!', res.data.message, type), this.props.history.push('/')
+      );
     }
 
     this.setState({
@@ -47,7 +50,7 @@ export default class Details extends Component {
 
     return (
       <div>
-        <Navbar email={params_email} />
+        <Navbar email={params_email} history={this.props.history} />
         <div className='container mt-4'>
           <div className='row'>
             <div className='col-md-8'>

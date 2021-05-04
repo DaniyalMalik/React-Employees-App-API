@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert';
+import axios from 'axios';
+
 export default class Login extends Component {
   state = {
     email: '',
@@ -12,28 +14,28 @@ export default class Login extends Component {
     this.setState({ email, password });
   };
 
-  onlogin = (e) => {
+  onlogin = async (e) => {
     e.preventDefault();
-    const { email, password } = this.state;
-    let valid = false,
-      users = localStorage.getItem('users');
-    users = JSON.parse(users);
-    if (users !== null) {
-      for (let i = 0; i < users.length; i++) {
-        if (email === users[i].email && password === users[i].password) {
-          valid = true;
-          swal('Greetings!', 'Logged In!', 'success');
-          window.location = `/dashboard/${email}`;
-          break;
-        }
-      }
-      if (valid === false) {
-        swal('Greetings!', 'Incorrect Credentials!', 'error');
-        valid = true;
-      }
-    } else {
-      swal('Greetings!', 'No user exists!', 'error');
+    const { name, email, password } = this.state;
+    const user = { name, email, password };
+
+    const res = await axios.post(
+      `${
+        process.env.REACT_APP_BASE_URL_LOCAL ||
+        process.env.REACT_APP_BASE_URL_PROD
+      }/api/auth/login`,
+      user,
+    );
+
+    if (!res.data.success) {
+      return swal('Greetings', res.data.message, 'error');
     }
+
+    const token = res.data.token;
+    console.log(token);
+    localStorage.setItem('token', token);
+    swal('Greetings', res.data.message, 'success');
+    this.props.history.push(`/dashboard/${email}`);
   };
 
   render() {
