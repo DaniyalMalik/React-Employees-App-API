@@ -48,6 +48,10 @@ export default class Add extends Component {
     swal('Greetings!', res.data.message, type);
   };
 
+  onBack = (e) => {
+    this.props.history.goBack();
+  };
+
   onchange = () => {
     let name = document.getElementById('name').value;
     let email = document.getElementById('email').value;
@@ -151,6 +155,7 @@ export default class Add extends Component {
                         value={DoJ}
                         onChange={this.onchange}
                         name='date'
+                        required
                         className='form-control'
                       />
                     </div>
@@ -169,7 +174,7 @@ export default class Add extends Component {
             <div className='col-md-4'>
               <button
                 className='btn btn-primary btn-block'
-                onClick={() => window.history.back()}>
+                onClick={this.onBack}>
                 Back
               </button>
             </div>

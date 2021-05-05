@@ -6,6 +6,8 @@ import Details from './components/crud/Details';
 import Add from './components/crud/Add';
 import Edit from './components/crud/Edit';
 import NotFound from './components/pages/NotFound';
+import ResetPassword from './components/auth/ResetPassword';
+import ForgotPassword from './components/auth/ForgotPassword';
 
 export default class App extends Component {
   render() {
@@ -19,12 +21,13 @@ export default class App extends Component {
               path='/dashboard/:params_email'
               component={Employees}
             />
-            ;
             <Route
               exact
               path='/dashboard/details/:params_email/:id'
               component={Details}
             />
+            <Route exact path='/resetpassword/:token' component={ResetPassword} />
+            <Route exact path='/forgotpassword' component={ForgotPassword} />
             <Route exact path='/dashboard/:params_email/add' component={Add} />
             <Route
               exact

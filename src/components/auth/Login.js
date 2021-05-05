@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 export default class Login extends Component {
   state = {
@@ -14,25 +15,21 @@ export default class Login extends Component {
     this.setState({ email, password });
   };
 
-  onlogin = async (e) => {
+  onLogin = async (e) => {
     e.preventDefault();
     const { name, email, password } = this.state;
     const user = { name, email, password };
-
-    const res = await axios.post(
-      `${
-        process.env.REACT_APP_BASE_URL_LOCAL ||
-        process.env.REACT_APP_BASE_URL_PROD
-      }/api/auth/login`,
-      user,
-    );
+    const baseUrl =
+      process.env.REACT_APP_BASE_URL_LOCAL ||
+      process.env.REACT_APP_BASE_URL_PROD;
+    const res = await axios.post(`${baseUrl}/api/auth/login`, user);
 
     if (!res.data.success) {
       return swal('Greetings', res.data.message, 'error');
     }
 
     const token = res.data.token;
-    console.log(token);
+
     localStorage.setItem('token', token);
     swal('Greetings', res.data.message, 'success');
     this.props.history.push(`/dashboard/${email}`);
@@ -48,7 +45,7 @@ export default class Login extends Component {
             <h3>Login Form</h3>
           </div>
           <div className='card-body'>
-            <form action='' method='post' onSubmit={this.onlogin}>
+            <form action='' method='post' onSubmit={this.onLogin}>
               <div className='input-group mb-3'>
                 <div className='input-group-prepend'>
                   <span className='input-group-text'>Email</span>
@@ -64,7 +61,7 @@ export default class Login extends Component {
                   required
                 />
               </div>
-              <div className='input-group mb-3'>
+              <div className='input-group mb-1'>
                 <div className='input-group-prepend'>
                   <span className='input-group-text'>Password</span>
                 </div>
@@ -78,6 +75,13 @@ export default class Login extends Component {
                   className='form-control'
                   required
                 />
+              </div>
+              <div
+                className='mb-1'
+                style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Link to={'/forgotpassword'} className='btn btn-link'>
+                  Forgot Password?
+                </Link>
               </div>
               <input
                 type='submit'

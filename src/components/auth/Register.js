@@ -19,28 +19,29 @@ export default class Register extends Component {
     this.setState({ name, email, password, repeat_password });
   };
 
-  onregister = async (e) => {
+  onRegister = async (e) => {
     e.preventDefault();
-    const { name, email, password } = this.state;
+    const { name, email, password, repeat_password } = this.state;
     const user = { name, email, password };
 
-    const res = await axios.post(
-      `${
+    if (password === repeat_password) {
+      const baseUrl =
         process.env.REACT_APP_BASE_URL_LOCAL ||
-        process.env.REACT_APP_BASE_URL_PROD
-      }/api/auth/register`,
-      user,
-    );
+        process.env.REACT_APP_BASE_URL_PROD;
+      const res = await axios.post(`${baseUrl}/api/auth/register`, user);
 
-    if (!res.data.success) {
-      return swal('Greetings', res.data.message, 'error');
+      if (!res.data.success) {
+        return swal('Greetings', res.data.message, 'error');
+      }
+
+      const token = res.data.token;
+
+      localStorage.setItem('token', token);
+      swal('Greetings', res.data.message, 'success');
+      this.props.history.push(`/dashboard/${email}`);
+    } else {
+      return swal('Greetings', 'Passwords Not Match!', 'error');
     }
-
-    const token = res.data.token;
-
-    localStorage.setItem('token', token);
-    swal('Greetings', res.data.message, 'success');
-    this.props.history.push(`/dashboard/${email}`);
   };
 
   render() {
@@ -53,7 +54,7 @@ export default class Register extends Component {
             <h3>Register Form</h3>
           </div>
           <div className='card-body'>
-            <form action='' method='post' onSubmit={this.onregister}>
+            <form action='' method='post' onSubmit={this.onRegister}>
               <div className='input-group mb-3'>
                 <div className='input-group-prepend'>
                   <span className='input-group-text'>Name</span>

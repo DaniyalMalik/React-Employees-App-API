@@ -64,7 +64,7 @@ export default class Add extends Component {
 
     let type = '';
     res.data.success ? (type = 'success') : (type = 'error');
-    
+
     if (!res.data.success) {
       return (
         swal('Greetings!', res.data.message, type), this.props.history.push('/')
@@ -89,6 +89,10 @@ export default class Add extends Component {
       DoJ,
       salary,
     });
+  };
+
+  onBack = (e) => {
+    this.props.history.goBack();
   };
 
   render() {
@@ -197,7 +201,7 @@ export default class Add extends Component {
             <div className='col-md-4'>
               <button
                 className='btn btn-primary btn-block'
-                onClick={() => window.history.back()}>
+                onClick={this.onBack}>
                 Back
               </button>
             </div>

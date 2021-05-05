@@ -44,6 +44,10 @@ export default class Details extends Component {
     });
   };
 
+  onBack = (e) => {
+    this.props.history.goBack();
+  };
+  
   render() {
     const { id, email, name, phone, DoJ, salary } = this.state;
     const { params_email } = this.props.match.params;
@@ -87,7 +91,7 @@ export default class Details extends Component {
             <div className='col-md-4'>
               <button
                 className='btn btn-primary btn-block'
-                onClick={() => window.history.back()}>
+                onClick={this.onBack}>
                 Back
               </button>
             </div>
