@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import swal from 'sweetalert';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import Navbar from '../../layouts/Navbar';
 
 export default class Login extends Component {
   state = {
@@ -37,59 +38,63 @@ export default class Login extends Component {
 
   render() {
     const { email, password } = this.state;
+    localStorage.removeItem('token');
 
     return (
-      <div className='container mt-5'>
-        <div className='card'>
-          <div className='card-header'>
-            <h3>Login Form</h3>
-          </div>
-          <div className='card-body'>
-            <form action='' method='post' onSubmit={this.onLogin}>
-              <div className='input-group mb-3'>
-                <div className='input-group-prepend'>
-                  <span className='input-group-text'>Email</span>
+      <div>
+        <Navbar email='' />
+        <div className='container mt-5'>
+          <div className='card'>
+            <div className='card-header'>
+              <h3>Login Form</h3>
+            </div>
+            <div className='card-body'>
+              <form action='' method='post' onSubmit={this.onLogin}>
+                <div className='input-group mb-3'>
+                  <div className='input-group-prepend'>
+                    <span className='input-group-text'>Email</span>
+                  </div>
+                  <input
+                    onChange={this.onchange}
+                    type='email'
+                    id='emailL'
+                    placeholder='Enter Email'
+                    name='email'
+                    value={email}
+                    className='form-control'
+                    required
+                  />
+                </div>
+                <div className='input-group mb-1'>
+                  <div className='input-group-prepend'>
+                    <span className='input-group-text'>Password</span>
+                  </div>
+                  <input
+                    onChange={this.onchange}
+                    type='password'
+                    id='passwordL'
+                    value={password}
+                    name='password'
+                    placeholder='Enter Password'
+                    className='form-control'
+                    required
+                  />
+                </div>
+                <div
+                  className='mb-1'
+                  style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Link to={'/forgotpassword'} className='btn btn-link'>
+                    Forgot Password?
+                  </Link>
                 </div>
                 <input
-                  onChange={this.onchange}
-                  type='email'
-                  id='emailL'
-                  placeholder='Enter Email'
-                  name='email'
-                  value={email}
-                  className='form-control'
-                  required
+                  type='submit'
+                  className='btn btn-success btn-block'
+                  name='submit'
+                  value='Login'
                 />
-              </div>
-              <div className='input-group mb-1'>
-                <div className='input-group-prepend'>
-                  <span className='input-group-text'>Password</span>
-                </div>
-                <input
-                  onChange={this.onchange}
-                  type='password'
-                  id='passwordL'
-                  value={password}
-                  name='password'
-                  placeholder='Enter Password'
-                  className='form-control'
-                  required
-                />
-              </div>
-              <div
-                className='mb-1'
-                style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Link to={'/forgotpassword'} className='btn btn-link'>
-                  Forgot Password?
-                </Link>
-              </div>
-              <input
-                type='submit'
-                className='btn btn-success btn-block'
-                name='submit'
-                value='Login'
-              />
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       </div>

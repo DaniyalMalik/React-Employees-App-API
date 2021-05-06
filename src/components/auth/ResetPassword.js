@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert';
+import Navbar from '../../layouts/Navbar';
 import axios from 'axios';
 
 export default class ResetPassword extends Component {
@@ -51,61 +52,66 @@ export default class ResetPassword extends Component {
     const { password, repeat_password } = this.state;
 
     return (
-      <div className='container mt-5'>
-        <div className='row'>
-          <div className='col-md-8'>
-            <div className='card'>
-              <div className='card-header'>
-                <h3>Change Password Form</h3>
-              </div>
-              <div className='card-body'>
-                <form action='' method='post' onSubmit={this.onReset}>
-                  <div className='input-group mb-3'>
-                    <div className='input-group-prepend'>
-                      <span className='input-group-text'>New Password</span>
+      <div>
+        <Navbar email='' />
+        <div className='container mt-5'>
+          <div className='row'>
+            <div className='col-md-8'>
+              <div className='card'>
+                <div className='card-header'>
+                  <h3>Change Password Form</h3>
+                </div>
+                <div className='card-body'>
+                  <form action='' method='post' onSubmit={this.onReset}>
+                    <div className='input-group mb-3'>
+                      <div className='input-group-prepend'>
+                        <span className='input-group-text'>New Password</span>
+                      </div>
+                      <input
+                        onChange={this.onchange}
+                        type='password'
+                        id='password'
+                        value={password}
+                        name='password'
+                        placeholder='Enter Password'
+                        className='form-control'
+                        required
+                      />
+                    </div>
+                    <div className='input-group mb-3'>
+                      <div className='input-group-prepend'>
+                        <span className='input-group-text'>
+                          Repeat New Password
+                        </span>
+                      </div>
+                      <input
+                        type='password'
+                        value={repeat_password}
+                        id='repeat-password'
+                        name='repeat-password'
+                        onChange={this.onchange}
+                        placeholder='Repeat Password'
+                        className='form-control'
+                        required
+                      />
                     </div>
                     <input
-                      onChange={this.onchange}
-                      type='password'
-                      id='password'
-                      value={password}
-                      name='password'
-                      placeholder='Enter Password'
-                      className='form-control'
-                      required
+                      type='submit'
+                      className='btn btn-success btn-block'
+                      name='submit'
+                      value='Change Password'
                     />
-                  </div>
-                  <div className='input-group mb-3'>
-                    <div className='input-group-prepend'>
-                      <span className='input-group-text'>
-                        Repeat New Password
-                      </span>
-                    </div>
-                    <input
-                      type='password'
-                      value={repeat_password}
-                      id='repeat-password'
-                      name='repeat-password'
-                      onChange={this.onchange}
-                      placeholder='Repeat Password'
-                      className='form-control'
-                      required
-                    />
-                  </div>
-                  <input
-                    type='submit'
-                    className='btn btn-success btn-block'
-                    name='submit'
-                    value='Change Password'
-                  />
-                </form>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
-          <div className='col-md-4'>
-            <button className='btn btn-primary btn-block' onClick={this.onBack}>
-              Back
-            </button>
+            <div className='col-md-4'>
+              <button
+                className='btn btn-primary btn-block'
+                onClick={this.onBack}>
+                Back
+              </button>
+            </div>
           </div>
         </div>
       </div>

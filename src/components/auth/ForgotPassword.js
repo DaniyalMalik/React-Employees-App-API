@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import Navbar from '../../layouts/Navbar';
 import swal from 'sweetalert';
 import axios from 'axios';
 
 export default class ForgotPassword extends Component {
   state = {
     email: '',
-    link: '',
   };
 
   onchange = () => {
@@ -37,49 +37,54 @@ export default class ForgotPassword extends Component {
   };
 
   render() {
-    const { email, link } = this.state;
+    const { email } = this.state;
 
     return (
-      <div className='container mt-5'>
-        <div className='row'>
-          <div className='col-md-8'>
-            <div className='card'>
-              <div className='card-header'>
-                <h6>
-                  In order to change password, a link will be sent on your
-                  email.
-                </h6>
-              </div>
-              <div className='card-body'>
-                <form action='' method='post' onSubmit={this.onSend}>
-                  <div className='input-group mb-3'>
-                    <div className='input-group-prepend'>
-                      <span className='input-group-text'>Email</span>
+      <div>
+        <Navbar email='' />
+        <div className='container mt-5'>
+          <div className='row'>
+            <div className='col-md-8'>
+              <div className='card'>
+                <div className='card-header'>
+                  <h6>
+                    In order to change password, a link will be sent on your
+                    email.
+                  </h6>
+                </div>
+                <div className='card-body'>
+                  <form action='' method='post' onSubmit={this.onSend}>
+                    <div className='input-group mb-3'>
+                      <div className='input-group-prepend'>
+                        <span className='input-group-text'>Email</span>
+                      </div>
+                      <input
+                        onChange={this.onchange}
+                        type='email'
+                        id='email'
+                        value={email}
+                        name='email'
+                        placeholder='Enter Email'
+                        className='form-control'
+                        required
+                      />
+                      <div class='input-group-append'>
+                        <button class='btn btn-primary' type='submit'>
+                          Send Link
+                        </button>
+                      </div>
                     </div>
-                    <input
-                      onChange={this.onchange}
-                      type='email'
-                      id='email'
-                      value={email}
-                      name='email'
-                      placeholder='Enter Email'
-                      className='form-control'
-                      required
-                    />
-                    <div class='input-group-append'>
-                      <button class='btn btn-primary' type='submit'>
-                        Send Link
-                      </button>
-                    </div>
-                  </div>
-                </form>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
-          <div className='col-md-4'>
-            <button className='btn btn-primary btn-block' onClick={this.onBack}>
-              Back
-            </button>
+            <div className='col-md-4'>
+              <button
+                className='btn btn-primary btn-block'
+                onClick={this.onBack}>
+                Back
+              </button>
+            </div>
           </div>
         </div>
       </div>

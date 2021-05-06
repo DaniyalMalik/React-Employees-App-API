@@ -32,6 +32,10 @@ export default class Employees extends Component {
     }
 
     // swal('Greetings!', res?.data?.message, type);
+    if (users.length === 0) {
+      return this.setState({ users: undefined });
+    }
+
     this.setState({ users });
   };
 
@@ -99,7 +103,9 @@ export default class Employees extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.length !== 0 ? (
+                  {users === undefined ? (
+                    <h1>No Data Found!</h1>
+                  ) : users.length !== 0 ? (
                     users.map((value, index) => (
                       <tr key={index}>
                         <td>{++count}</td>
