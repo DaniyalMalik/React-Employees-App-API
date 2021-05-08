@@ -28,9 +28,7 @@ export default class Add extends Component {
     res.data.success ? (type = 'success') : (type = 'error');
 
     if (!res.data.success) {
-      return (
-        swal('Greetings!', res.data.message, type), this.props.history.push('/')
-      );
+      return swal('Greetings!', res.data.message, type);
     }
 
     const users = res.data.data;
@@ -66,9 +64,7 @@ export default class Add extends Component {
     res.data.success ? (type = 'success') : (type = 'error');
 
     if (!res.data.success) {
-      return (
-        swal('Greetings!', res.data.message, type), this.props.history.push('/')
-      );
+      return swal('Greetings!', res.data.message, type);
     }
 
     swal('Greetings!', res.data.message, type);

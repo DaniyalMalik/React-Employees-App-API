@@ -30,7 +30,7 @@ export default class Details extends Component {
 
     if (!res.data.success) {
       return (
-        swal('Greetings!', res.data.message, type), this.props.history.push('/')
+        swal('Greetings!', res.data.message, type)
       );
     }
 

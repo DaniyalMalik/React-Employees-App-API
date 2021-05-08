@@ -26,9 +26,7 @@ export default class Employees extends Component {
     res.data.success ? (type = 'success') : (type = 'error');
 
     if (!res.data.success) {
-      return (
-        swal('Greetings!', res.data.message, type), this.props.history.push('/')
-      );
+      return swal('Greetings!', res.data.message, type);
     }
 
     // swal('Greetings!', res?.data?.message, type);
@@ -54,9 +52,7 @@ export default class Employees extends Component {
     res.data.success ? (type = 'success') : (type = 'error');
 
     if (!res.data.success) {
-      return (
-        swal('Greetings!', res.data.message, type), this.props.history.push('/')
-      );
+      return swal('Greetings!', res.data.message, type);
     }
 
     this.setState({ users: res.data.employees });

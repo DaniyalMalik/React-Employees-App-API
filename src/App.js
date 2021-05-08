@@ -7,6 +7,7 @@ import Edit from './components/crud/Edit';
 import NotFound from './components/pages/NotFound';
 import ResetPassword from './components/auth/ResetPassword';
 import ForgotPassword from './components/auth/ForgotPassword';
+import ProtectedRoute from 'react-protected-route-component';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import VerifyEmail from './components/auth/VerifyEmail';
@@ -17,34 +18,66 @@ export default class App extends Component {
       <div>
         <Router>
           <Switch>
-            <Route
-              exact
-              path='/dashboard/:params_email'
-              component={Employees}
-            />
-            <Route
-              exact
-              path='/dashboard/details/:params_email/:id'
-              component={Details}
-            />
+            <Route exact path='/' component={Login} />
+            <Route exact path='/register' component={Register} />
             <Route
               exact
               path='/resetpassword/:token'
               component={ResetPassword}
             />
-            <Route
-              exact
-              path='/verifyemail/:email'
-              component={VerifyEmail}
-            />
+            <Route exact path='/verifyemail/:email' component={VerifyEmail} />
             <Route exact path='/forgotpassword' component={ForgotPassword} />
-            <Route exact path='/' component={Login} />
-            <Route exact path='/register' component={Register} />
-            <Route exact path='/dashboard/:params_email/add' component={Add} />
-            <Route
+            <ProtectedRoute
+              path='/dashboard/:params_email'
+              redirectRoute='/'
+              guardFunction={() => {
+                if (localStorage.getItem('token')) {
+                  return true;
+                } else {
+                  return false;
+                }
+              }}
+              component={Employees}
               exact
+            />
+            <ProtectedRoute
+              path='/dashboard/details/:params_email/:id'
+              redirectRoute='/'
+              guardFunction={() => {
+                if (localStorage.getItem('token')) {
+                  return true;
+                } else {
+                  return false;
+                }
+              }}
+              component={Details}
+              exact
+            />
+            <ProtectedRoute
+              path='/dashboard/:params_email/add'
+              redirectRoute='/'
+              guardFunction={() => {
+                if (localStorage.getItem('token')) {
+                  return true;
+                } else {
+                  return false;
+                }
+              }}
+              component={Add}
+              exact
+            />
+            <ProtectedRoute
               path='/dashboard/edit/:params_email/:id'
+              redirectRoute='/'
+              guardFunction={() => {
+                if (localStorage.getItem('token')) {
+                  return true;
+                } else {
+                  return false;
+                }
+              }}
               component={Edit}
+              exact
             />
             <Route component={NotFound} />
           </Switch>
