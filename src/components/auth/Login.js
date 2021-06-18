@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import Navbar from '../../layouts/Navbar';
 
 export default class Login extends Component {
@@ -80,13 +79,14 @@ export default class Login extends Component {
                     required
                   />
                 </div>
-                <div
+                <br />
+                {/* <div
                   className='mb-1'
                   style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Link to={'/forgotpassword'} className='btn btn-link'>
                     Forgot Password?
                   </Link>
-                </div>
+                </div> */}
                 <input
                   type='submit'
                   className='btn btn-success btn-block'
